@@ -1,0 +1,30 @@
+{
+  "name": "retinad",
+  "version": "1.0.0",
+  "description": "JS interface to integrate with the Retinad Platform",
+  "main": "retinad.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "serve": "live-server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Retinad/retinad.git"
+  },
+  "author": "Retinad",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Retinad/retinad/issues",
+    "email": "support@retinadvr.com"
+  },
+  "homepage": "https://github.com/Retinad/retinad#readme",
+  "dependencies": {
+    "aws-sdk": "^2.28.0",
+    "clientjs": "^0.1.11"
+  },
+  "devDependencies": {
+    "aws-sdk": "^2.28.0",
+    "clientjs": "^0.1.11",
+    "live-server": "^1.2.0"
+  }
+}

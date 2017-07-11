@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+    <title>retinad-simpletest</title>
+
+    <script src="dist/retinad.js"></script>
+
+    <style>
+        html{height:100%;width:100%;padding:0;margin:0}
+        body{height:100%;width:100%;padding:0;margin:0;overflow:hidden}
+    </style>
+
+
+</head>
+
+<body>
+    <script>
+        (function(){
+            retinad.connect({appId: 'APP_ID', accountKey: 'ACCOUNT_KEY'});
+            /*
+             * Set context name
+             * Play
+             * Front to right in 14 events
+             * Pause for 2 seconds
+             * Right to front in 14 events, resuming halfway
+             * Stop at the front
+            */
+            retinad.setContextName('MyFirstContext');
+            retinad.play({u: 0.5, v: 0.5}, 0.0);
+
+            var possibleUs = [0.51,0.53,0.54,0.56,0.58,0.61,0.63,0.65,0.67,0.69,0.7,0.71,0.72,0.74,0.75];
+            var index = 0;
+            var timer = setInterval(frontToRight, 1000);
+            function frontToRight() {
+              if (index > possibleUs.length-2)
+                pause();
+              retinad.collectData({u: possibleUs[index], v: 0.5}, index/10);
+              index++;
+            }
+            function pause() {
+              clearInterval(timer);
+              console.log("front to right done, pausing");
+              retinad.pause({u: 0.75, v: 0.5}, 1.4);
+              setTimeout(function() {
+                console.log("right to front without playing");
+                timer = setInterval(rightToFront, 1000);
+              }, 2000);
+            }
+            function rightToFront() {
+              if (index == 0)
+                stop();
+              if (index == 7) {
+                retinad.play({u: 0.8, v: 0.5}, 1.4);
+              }
+              retinad.collectData({u: possibleUs[index], v: 0.5}, (14+14-index)/10);
+              index--;
+            }
+            function stop() {
+              clearInterval(timer);
+              console.log("right to front done, stoping");
+              retinad.stop({u: 0.5, v: 0.5}, 3);
+            }
+        })();
+    </script>
+</body>
+</html>
