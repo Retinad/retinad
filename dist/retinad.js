@@ -130570,6 +130570,7 @@ function retinad_convertVector3ToUV(vector){
         v: v
     }
 }
+
 window.retinad_convertVector3ToUV = retinad_convertVector3ToUV;
 
 var retinad_defaults = {
@@ -130600,7 +130601,7 @@ var retinad = new function() {
 
     if(!!navigator.doNotTrack)
       return;
-    settings = retinad_extend({}, retinad_defaults, options || {});
+    this.settings = retinad_extend({}, retinad_defaults, options || {});
     var webglInfo =
     {
         "version" : "not found",
@@ -130659,10 +130660,10 @@ var retinad = new function() {
     request.open('POST', 'https://api.retinad.io/analytics/sessions', true);
     request.setRequestHeader('Content-Type', 'application/json');
     request.setRequestHeader('Retinad-Api-Key','#|:J$#]$7|54"?4>(|Ux91<]]{wTDi');
-    request.setRequestHeader('Retinad-Account-Key',settings.accountKey);
+    request.setRequestHeader('Retinad-Account-Key',this.settings.accountKey);
     request.onreadystatechange = updateSession(request, this);
     request.send(JSON.stringify({
-            "a" : settings.appId, // The appId from Retinad dashboard
+            "a" : this.settings.appId, // The appId from Retinad dashboard
             "d" : {
                 "retinad" : {
                     "name" : "videojs-vr-retinad",
@@ -130719,7 +130720,7 @@ var retinad = new function() {
   this.setContextName = function(contextName) {
     if(!!navigator.doNotTrack)
       return;
-    this.context = retinad_santitizeBase64(retinad_encode(contextName+" "+ settings.appId)); // The context hash, corresponds to the video name + appId
+    this.context = retinad_santitizeBase64(retinad_encode(contextName+" "+ this.settings.appId)); // The context hash, corresponds to the video name + appId
   };
 
   this.sendData = function(data) {
@@ -130796,17 +130797,17 @@ var retinad = new function() {
     }
 
     // If we have 5 seconds of data, we send it to our servers (this will batch the frames together to reduce network load and bandwidth)
-    if (frames.length >= 50 || forcePush) {
+    if (this.frames.length >= 50 || forcePush) {
 
         // We create a deep copy of the array
         var clonedFrames = JSON.parse(JSON.stringify(this.frames));
 
         // We delete the frames array (to put new data in it)
-        frames = [];
+        this.frames = [];
 
         // We create the event with the copied data
         var event = {
-          a: settings.appId, // The appId from Retinad dashboard
+          a: this.settings.appId, // The appId from Retinad dashboard
           s: this.session, // The session id retreived from the first call to the Retinad REST API
           e: [
             {
@@ -130824,7 +130825,7 @@ var retinad = new function() {
   this.play = function(currentUV, currentTime) {
     this.isPlaying = true;
     var event = {
-        a: settings.appId, // The appId from Retinad dashboard
+        a: this.settings.appId, // The appId from Retinad dashboard
         s: this.session, // The session id retreived from the first call to the Retinad REST API
         e: [
             {
@@ -130844,7 +130845,7 @@ var retinad = new function() {
   this.pause = function(currentUV, currentTime) {
     this.isPlaying = false;
     var event = {
-        a: settings.appId, // The appId from Retinad dashboard
+        a: this.settings.appId, // The appId from Retinad dashboard
         s: this.session, // The session id retreived from the first call to the Retinad REST API
         e: [
             {
@@ -130859,10 +130860,13 @@ var retinad = new function() {
   };
 
   this.stop = function(currentUV, currentTime) {
+    if (this.playString === 'start')
+      return;
+
     this.isPlaying = false;
     this.didEnd = true;
     var event = {
-        a: settings.appId, // The appId from Retinad dashboard
+        a: this.settings.appId, // The appId from Retinad dashboard
         s: this.session, // The session id retreived from the first call to the Retinad REST API
         e: [
             {

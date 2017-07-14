@@ -3,6 +3,8 @@ Retinad Javascript plugin
 
 ## How to use
 
+To use the plugin, subscribe to Retinad directly from [our website](https://www.retinadvr.com "Retinad website"). Copy the App ID and Account Key received by email.
+
 ### Installation
 
 * `npm install retinadjs`

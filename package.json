@@ -1,6 +1,6 @@
 {
   "name": "retinad",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "JS interface to integrate with the Retinad Platform",
   "main": "retinad.js",
   "scripts": {
